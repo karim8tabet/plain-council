@@ -1,0 +1,2 @@
+date | task | who coded | size | usage | passed first time | Codex ran its own checks | fix-ups
+2026-11-13 | pipeline readers + checks | Codex (+Claude fixes) | 8 modules + 7 test files, ~600 lines | usage: | no | yes | tmmis rewrite (stage outcomes, upcoming from tracking text, letter origin), report_log epoch + NCF glossary, votes count Vote column only, source-aware date check; tests expanded 9 -> 31

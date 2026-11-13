@@ -30,7 +30,7 @@ Mark each row ✅ pass / ❌ fail / ⏭ skipped (say why). If a test fails and y
 | P14 | Auto | Voting Record for `2026.EX31.2` | 4 Council votes on May 21: Matlow motion 1 **Lost 8–16** (amendment), Bravo 2a Carried 23–1 (amendment), Bravo 2b Carried 23–1 (amendment), adopt as amended Carried 23–1 (main item) |
 | P15 | Auto | Voting Record for `2026.TE32.46`, including the "TE32,46" typo record | 3 votes found: Apr 30 adopt 6–0, Bradford motion 1 Carried 16–8 (amendment), adopt as amended Carried 20–4 (main item). The comma-typo record **is matched** |
 | P16 | Auto | Report Request Log for `2026.EX31.2` | Part 6 status "closed", closed by `2026.CC42.12`. Follow-up request from CC42.12: report by June 2027, status "Not Carried Forward" |
-| P17 | Auto | Excel serial dates in the Report Request Log | 46163 → 2026-05-20; 46197 → 2026-06-23 |
+| P17 | Auto | Excel serial dates in the Report Request Log | 46163 → 2026-05-21; 46197 → 2026-06-24 (Excel day 0 = 1899-12-30) |
 
 ## 2. Checks on AI output
 
@@ -41,7 +41,7 @@ Mark each row ✅ pass / ❌ fail / ⏭ skipped (say why). If a test fails and y
 | C3 | Auto | Quote with one changed word that changes the meaning ("approved" → "rejected") | **Fail** |
 | C4 | Auto | Quote that isn't in the source at all | **Fail**. Sentence rejected, never shown to staff as passable |
 | C5 | Auto | What's displayed for a passing quote | The **source text span**, not the AI's version of the quote |
-| C6 | Auto | AI sentence containing a date or deadline ("comments due Nov 20") | Rejected: "dates must come from the official page" |
+| C6 | Auto | AI sentence with a date not in its source quote ("comments due Nov 20"), or any deadline word | Flagged. A date that appears in the source quote is allowed; deadline words are always flagged (deadlines come only from the official page). Vote tallies like "16-8" are not flagged |
 | C7 | Auto | AI sentence says "Council approved" for a staff-report sentence | Flagged: decision word doesn't match the stage |
 | C8 | Auto | Sentence with a loaded word ("the controversial closure", "finally approved", "massive") | Flagged: "loaded language", with the word named |
 | C9 | Auto | Neutral sentence ("Council added $1,060,000 to the 2026 budget for this program") | No neutrality flag |
