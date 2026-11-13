@@ -120,6 +120,7 @@ async function Queue({ searchParams }: { searchParams: Promise<{ item?: string; 
         {byHand.map((c) => (
           <li key={c.id} id={`c${c.id}`} className={`rounded-xl border bg-card p-4 space-y-3 ${tab === "review" && c.flags.length ? "border-warn" : "border-line"}`}>
             <div className="flex flex-wrap gap-2 text-xs">
+              <span className="font-mono text-muted py-0.5">#{c.id}</span>
               <span className="rounded bg-accent-soft px-1.5 py-0.5">{SECTION_TITLES[c.section]}</span>
               <span className="rounded bg-paper border border-line px-1.5 py-0.5">{stageTag(c.stage, body.get(c.stage), c.stage_date)}</span>
             </div>
