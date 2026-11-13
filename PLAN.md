@@ -69,7 +69,7 @@ For each council item, code reads the official records, AI drafts a plain-langua
 - **Community poster:** one page, large text, QR code, for libraries, tenant associations and laundromats.
 
 ## Order of work
-**Hard rule:** if the must-work path isn't done by **Fri 6 PM**, everything after it is cut.
+**Hard rule:** if the must-work path isn't done by **Fri 10 PM** (moved from 6 PM because building started at 1:20 PM), everything after it is cut. Stop new features by **Sat 6 AM**. After that: video, report, Devpost, final commit.
 
 1. ~~Checks that could change the plan~~: **done** (see Findings).
 2. Setup: repo, README with credits, Supabase tables (`items`, `stages`, `passages`, `claims`, `votes`, `reviews`, `requests`, `sources`) with **row-level security** and a logged-out read test. (~1.5h)

@@ -1,38 +1,28 @@
 # Where we left off
 
-_Last updated: Fri Nov 13, 2026._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
+_Last updated: Fri Nov 13, 2026, 1:25 PM ET._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
 
 ## ⚠ Deadline
-Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.** Nothing counts after that.
+Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.**
+- Must-work path done by **Fri 10 PM**.
+- No new features after **Sat 6 AM**.
 
 ## Done
-- Planning finished. All decisions and verified findings are in `PLAN.md`.
-- `TESTS.md`: final test checklist with expected results.
-- Repo set up and committed:
-  - README skeleton
-  - `.env.example`, `.gitignore`
-  - `supabase/migrations/001_schema.sql`: all tables plus row-level security
-- `pipeline/requirements.txt` written.
+- Planning, `PLAN.md`, `TESTS.md`.
+- README with data sources and credits (versions and audit results).
+- `supabase/migrations/001_schema.sql`: tables plus row-level security.
+- Python packages installed in `.venv/` (pip-audit clean).
+- Next.js site created in `web/`, plus Supabase, qrcode and ics packages (npm audit clean for production).
 
-## In progress (stopped on purpose, safe to redo)
-- Python package install into `.venv/`. It was stopped mid-way, so delete `.venv` and run it again:
+## Waiting on you
+- Create Groq, Supabase and Vercel accounts.
+- Copy `.env.example` to `.env` and fill it in.
+- Run `001_schema.sql` in the Supabase SQL editor.
+- Serena: `.serena/project.yml` has `language_servers: []`. Add `python` and `typescript`.
 
-```powershell
-Remove-Item -Recurse -Force .venv
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r pipeline\requirements.txt pip-audit
-.\.venv\Scripts\pip-audit.exe
-```
-
-## Next steps, in order
-1. Finish the Python install (above), run `pip-audit`, report high/critical issues.
-2. Create the Next.js site in `web/`, add `@supabase/supabase-js`, `@supabase/ssr`, `qrcode`, `ics`, run `npm audit`.
-3. You: create Groq, Supabase and Vercel accounts, fill `.env`, run `001_schema.sql` in the Supabase SQL editor.
-4. Build the **must-work path** end to end: postal code → ward list → Church St card with stage tags → tap a footnote → timeline with votes → staff review catching a real flagged sentence.
-5. Then follow "Order of work" in `PLAN.md` from step 4 on.
-
-## Hand-offs to Codex (test-checkable pieces)
-- Quote matcher, neutral words, date ban, reading level (tests C1–C11)
-- Postal code → ward (F1–F5)
-- City page reader + item list loader (P1–P17)
-- Redline comparison, calendar file (K8, K14–K15)
+## Next steps
+1. Pipeline: city page reader + Voting Record + Report Request Log for Church St (no keys needed).
+2. Groq drafting + checks (needs `GROQ_API_KEY`).
+3. Load into Supabase (needs Supabase keys).
+4. Must-work path in the website.
+5. Then "Order of work" in `PLAN.md` from step 4.
