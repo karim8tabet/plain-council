@@ -1,0 +1,10 @@
+httpx
+beautifulsoup4
+pdfplumber
+rapidfuzz
+textstat
+groq
+supabase
+openpyxl
+shapely
+pytest
