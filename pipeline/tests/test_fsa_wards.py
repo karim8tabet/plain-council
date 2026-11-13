@@ -21,3 +21,22 @@ def test_sliver_dropped():
 
 def test_area_outside_toronto_skipped():
     assert fsa_wards({"M9Z": box(50, 50, 60, 60)}, WARDS) == {}
+
+
+# --- the built lookup used by the website (golden checks on known places) ---
+import json
+from pathlib import Path
+
+LOOKUP = json.loads((Path(__file__).resolve().parents[2] / "web" / "lib" / "fsa-wards.json").read_text(encoding="utf-8"))
+
+
+def test_known_postal_areas():
+    assert LOOKUP["M5V"] == [10]        # King West / CityPlace: Spadina-Fort York
+    assert LOOKUP["M6R"] == [4]         # Roncesvalles: Parkdale-High Park
+    assert LOOKUP["M6K"][0] == 4        # 1337 Queen St W area: mostly Ward 4
+    assert LOOKUP["M5B"] == [13]        # Downtown Yonge: Toronto Centre
+    assert LOOKUP["M9W"] == [1]         # Rexdale: Etobicoke North
+
+
+def test_every_ward_reachable():
+    assert {w for ws in LOOKUP.values() for w in ws} == set(range(1, 26))

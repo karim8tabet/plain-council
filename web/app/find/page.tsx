@@ -26,7 +26,7 @@ async function Result({ searchParams }: { searchParams: Promise<{ pc?: string }>
         <p>We couldn&apos;t match that postal code area. Please <Link href="/">choose your ward from the list</Link>.</p>
       )}
       <p className="text-sm text-muted">
-        Not sure which is yours? The City&apos;s official ward finder can check your full address.
+        Not sure which is yours? Enter your full address on the City&apos;s <a href="https://www.toronto.ca/city-government/council/members-of-council/">Members of Council page</a> to find your ward and councillor.
       </p>
     </div>
   );

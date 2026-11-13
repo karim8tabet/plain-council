@@ -14,8 +14,9 @@ import json
 import sys
 from pathlib import Path
 
+import numpy as np
+import shapely
 from shapely.geometry import shape
-from shapely.ops import transform
 
 ROOT = Path(__file__).resolve().parent
 GEO = ROOT / "cache" / "geo"
@@ -45,25 +46,31 @@ def load_wards(to_crs):
     from pyproj import Transformer
     t = Transformer.from_crs("EPSG:4326", to_crs, always_xy=True)
     g = json.loads((GEO / "city-wards-4326.geojson").read_text(encoding="utf-8"))
-    return {int(f["properties"]["AREA_SHORT_CODE"]): transform(t.transform, shape(f["geometry"])).buffer(0)
+    project = lambda xy: np.column_stack(t.transform(xy[:, 0], xy[:, 1]))
+    return {int(f["properties"]["AREA_SHORT_CODE"]): shapely.transform(shape(f["geometry"]), project).buffer(0)
             for f in g["features"]}
 
 
 def load_toronto_fsas():
     import shapefile  # pyshp
     from pyproj import CRS
-    path = GEO / "lfsa000b21a_e.zip"
-    if not path.exists():
-        sys.exit(f"Missing {path}. Download the 2021 FSA cartographic boundary file (shapefile) from Statistics Canada.")
-    r = shapefile.Reader(str(path))
+    folder = GEO / "lfsa000b21a_e"          # unzipped download
+    zipped = GEO / "lfsa000b21a_e.zip"      # or the zip as downloaded
+    if (folder / "lfsa000b21a_e.shp").exists():
+        r = shapefile.Reader(str(folder / "lfsa000b21a_e.shp"), encoding="latin-1")
+        crs = CRS.from_wkt((folder / "lfsa000b21a_e.prj").read_text())
+    elif zipped.exists():
+        r = shapefile.Reader(str(zipped), encoding="latin-1")
+        crs = CRS.from_wkt(r.prj.read().decode())
+    else:
+        sys.exit(f"Missing {folder} (or {zipped}). Download the 2021 FSA cartographic boundary file from Statistics Canada.")
     fields = [f[0] for f in r.fields[1:]]
-    crs = CRS.from_wkt(r.prj.read().decode()) if getattr(r, "prj", None) else CRS.from_epsg(3347)
+    code_at = fields.index("CFSAUID")
     fsas = {}
-    for rec, shp in zip(r.records(), r.shapes()):
-        d = dict(zip(fields, rec))
-        code = d.get("CFSAUID", "")
-        if code.startswith("M"):  # Toronto postal codes all start with M
-            fsas[code] = shape(shp.__geo_interface__).buffer(0)
+    for i, rec in enumerate(r.iterRecords()):
+        code = rec[code_at]
+        if code.startswith("M"):  # Toronto postal codes all start with M; read only those shapes
+            fsas[code] = shape(r.shape(i).__geo_interface__).buffer(0)
     return fsas, crs
 
 

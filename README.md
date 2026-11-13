@@ -49,7 +49,7 @@ All data is public. Dates show when each source was checked.
 | [Members of Toronto City Council: Voting Record](https://open.toronto.ca/dataset/members-of-toronto-city-council-voting-record/) | Recorded votes (amendment vs. main item) | Refreshed by the city Nov 7, 2026 |
 | [Report Request Log: City Council and its Committees](https://open.toronto.ca/dataset/report-request-log-city-council-and-its-committees/) | "What happens next" (report-back requests) | Refreshed by the city Aug 26, 2026 |
 | Toronto ward boundaries (Toronto Open Data, "City Wards", 25-ward model, `city-wards-data-4326.geojson`) | Postal code → ward | Downloaded Nov 13, 2026 |
-| 2021 Census forward sortation area boundaries (Statistics Canada, `lfsa000b21a_e`) | Postal code → ward | _TODO: download date_ |
+| 2021 Census forward sortation area boundaries (Statistics Canada, `lfsa000b21a_e`, cartographic). Used under the Statistics Canada Open Licence; postal-code geography © Canada Post | Postal code → ward (96 Toronto areas; 48 cross ward lines) | Downloaded Nov 13, 2026 |
 
 ### Items with full cards
 - `2026.TE32.46`: Pedestrianizing Church Street Pilot (decided, amended at Council)

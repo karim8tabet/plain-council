@@ -18,7 +18,7 @@ export default function Home() {
           <label className="flex flex-col gap-1">
             <span className="text-sm font-medium">First 3 characters of your postal code</span>
             <input
-              name="pc" required maxLength={7} autoComplete="postal-code" inputMode="text"
+              name="pc" required minLength={3} maxLength={3} autoComplete="postal-code" inputMode="text"
               placeholder="e.g. M5V" pattern="[Mm]\s*\d\s*[A-Za-z].*"
               title="Toronto postal codes start with M, then a number and a letter (e.g. M5V)"
               className="w-40 rounded-lg border border-line bg-paper px-3 py-2 uppercase text-lg"
@@ -28,7 +28,7 @@ export default function Home() {
         </form>
         <p className="text-sm text-muted">
           Only the first 3 characters are used, and nothing is stored. Not sure? Use the City&apos;s{" "}
-          <a href="https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/">official ward finder</a>.
+          <a href="https://www.toronto.ca/city-government/council/members-of-council/">official ward finder</a>.
         </p>
       </section>
 
