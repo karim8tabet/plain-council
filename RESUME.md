@@ -1,10 +1,10 @@
 # Where we left off
 
-_Last updated: Fri Nov 13, 2026, 4:20 PM ET._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
+_Last updated: Fri Nov 13, 2026, ~6:30 PM ET._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
 
 ## ⚠ Deadline
 Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.**
-- Must-work path done by **Fri 10 PM**. ✅ Done Fri 4:20 PM (local; not yet deployed).
+- Must-work path done by **Fri 10 PM**. ✅ Done, and live at https://plain-council.vercel.app/ (auto-deploys from `main`).
 - No new features after **Sat 6 AM**.
 
 ## Done
@@ -16,16 +16,19 @@ Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.**
   - Prompt history for the docs: run 1 copied legal wording (grade 17.7, `out/2026.EX31.2.run1-legal-wording.json`); run 2 grade 11.5; checker false positives on committee text fixed by labelling who said each source.
 - Website (`web/`, Next.js 16 with Cache Components): home + postal code (3 chars only), ward list, Decision Card (status line, have-a-say, plain sentences with stage tags and tap-to-source, steps with votes, submission counts, follow-up report requests), about page.
 - Staff: login (Supabase Auth), review queue with tabs To review / Published / Rejected, edit, undo, permanent reject, demo account read-only.
-  - Accounts: clerk = Karim's email; demo = an old test account (since deleted) (password to be put in README/Devpost). Change any weak password before deploying.
+  - Accounts: clerk = Karim's email (needs a strong password); demo = demo@plaincouncil.example (read-only; password goes in README/Devpost). Public sign-ups should be off.
+- "What changed between steps" on every card: code-only word-by-word comparison of the official text at each step (`web/lib/redline.ts`, `npm --prefix web test`). Staff recommendations read from the report PDF.
+- Repo: private GitHub `karim8tabet/plain-council` (make public before submitting). Residents' names removed from fixtures and all history.
+- AI pre-check of all sentences for the human review: `out/review-notes.md` (not committed). Test review clicks were reset; review log is empty.
 
 ## Waiting on you
-- Review sentences for all 3 items in /staff (this is the "human review" evidence).
-- Vercel account (for deploy).
+- Review sentences for all 3 items in /staff using `out/review-notes.md` (this is the "human review" evidence).
+- Make sure "Allow new users to sign up" is off in Supabase, and the clerk password is strong.
 - Serena: `.serena/project.yml` has `language_servers: []`. Add `python` and `typescript`.
 
 ## Next steps (PLAN.md order of work)
-1. Step 4: "What changed" redline (staff → committee → Council), per-item pipeline counts for the docs.
-2. Deploy to Vercel (needs account) and test from a fresh browser.
+1. ✅ Redline. ✅ Deploy.
+2. Per-item pipeline counts for the docs (after review).
 3. Step 6: poster/QR, French + Chinese, accessibility pass.
 4. Step 7: scheduled jobs (GitHub Actions) + "Add item" box.
 5. Steps 8–9: docs/UML, Readiness Report, Devpost text, video.
