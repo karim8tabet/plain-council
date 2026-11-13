@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { getCard } from "@/lib/data";
-import { fmtDate, REQUEST_STATUS, SECTION_ORDER, SECTION_TITLES, WARDS } from "@/lib/labels";
+import { fmtDate, REQUEST_STATUS, SECTION_ORDER, SECTION_TITLES, WARDS, whereItStands } from "@/lib/labels";
 import { Sentence } from "@/components/Sentence";
 import { Timeline } from "@/components/Timeline";
 import { HaveASay } from "@/components/HaveASay";
@@ -24,6 +24,7 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
           {item.ref} · {item.city_wide ? "City-wide" : item.wards.map((w) => `Ward ${w} (${WARDS[w]})`).join(", ")}
         </p>
         <h1 className="text-3xl font-semibold leading-tight">{item.title}</h1>
+        <p className="text-lg font-medium">{whereItStands(stages)} <a className="text-sm font-normal" href="#steps">See the steps</a></p>
         <p className="text-sm"><a href={item.item_url}>Official item page (City of Toronto)</a></p>
         {item.source_changed && (
           <p role="status" className="rounded-lg border border-warn bg-warn-soft text-warn p-3 text-sm font-medium">
@@ -65,7 +66,12 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
       </section>
 
       <section aria-labelledby="steps" className="space-y-3">
-        <h2 id="steps" className="text-xl font-semibold">Where it is in the process</h2>
+        <h2 id="steps" className="text-xl font-semibold">How it got here, step by step</h2>
+        <p className="text-sm text-muted max-w-prose">
+          Council items move through steps. Usually City staff write a report with recommendations (some items start from a councillor&apos;s letter instead). A committee (or board)
+          considers it and recommends what City Council should do. City Council makes the final decision and can change
+          what was recommended. The coloured tags on the sentences above say which of these steps each one comes from.
+        </p>
         <Timeline stages={stages} votes={votes} />
         {item.public_submissions ? (
           <p className="text-sm">
@@ -77,8 +83,8 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
 
       {requests.length > 0 && (
         <section aria-labelledby="next" className="space-y-3">
-          <h2 id="next" className="text-xl font-semibold">What happens next</h2>
-          <p className="text-sm text-muted">Reports that Council asked City staff to bring back, from the City Clerk&apos;s Report Request Log.</p>
+          <h2 id="next" className="text-xl font-semibold">Follow-up work Council asked for</h2>
+          <p className="text-sm text-muted max-w-prose">When it decided, City Council asked City staff to come back later with more work on this topic. Here is what was asked, and where it stands in the City Clerk&apos;s Report Request Log.</p>
           <ul className="space-y-3">
             {requests.map((r) => (
               <li key={r.id} className="rounded-xl border border-line bg-card p-4 text-sm space-y-1">

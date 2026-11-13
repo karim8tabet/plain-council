@@ -45,6 +45,18 @@ export function stageRole(kind: StageKind): string {
   }
 }
 
+/** One line at the top of a card: where the item stands, from the official stage records only. */
+export function whereItStands(stages: { kind: StageKind; body_name: string; stage_date: string | null; outcome: string | null; amended: boolean | null }[]): string {
+  const upcoming = stages.find((s) => s.outcome === "Scheduled");
+  if (upcoming) return `Upcoming: the ${upcoming.body_name} meets on ${fmtDate(upcoming.stage_date)}. Nothing has been decided yet.`;
+  const last = stages[stages.length - 1];
+  if (!last) return "";
+  if (last.kind === "city_council")
+    return `Decided by City Council on ${fmtDate(last.stage_date)}${last.amended ? ", with changes to what was recommended" : last.amended === false ? ", as recommended" : ""}.`;
+  if (last.kind === "staff_report") return `City staff published a report on ${fmtDate(last.stage_date)}. No committee has considered it yet.`;
+  return `Recommended by the ${last.body_name} on ${fmtDate(last.stage_date)}. This is a recommendation, not a final decision. Check the official page for the next step.`;
+}
+
 export const SECTION_TITLES: Record<string, string> = {
   what: "What is proposed or decided",
   reasons: "Reasons given in the staff report",
