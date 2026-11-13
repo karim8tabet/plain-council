@@ -16,6 +16,8 @@ const FLAG_TEXT: Record<string, string> = {
   missing_condition: "Checker: drops a condition",
   loaded_language: "Checker: wording not neutral",
   checker_missing: "Checker gave no verdict",
+  suggested_edit: "Reworded by AI pre-check (compare with the quote before approving)",
+  suggest_reject: "AI pre-check suggests rejecting",
 };
 
 const DONE_TEXT: Record<string, string> = {
