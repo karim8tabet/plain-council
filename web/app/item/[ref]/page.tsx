@@ -5,6 +5,7 @@ import { fmtDate, REQUEST_STATUS, SECTION_ORDER, SECTION_TITLES, WARDS, whereItS
 import { Sentence } from "@/components/Sentence";
 import { Timeline } from "@/components/Timeline";
 import { HaveASay } from "@/components/HaveASay";
+import { WhatChanged } from "@/components/WhatChanged";
 import { readingGrade } from "@/lib/reading";
 
 async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
@@ -64,6 +65,8 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
           </>
         )}
       </section>
+
+      <WhatChanged stages={stages} />
 
       <section aria-labelledby="steps" className="space-y-3">
         <h2 id="steps" className="text-xl font-semibold">How it got here, step by step</h2>

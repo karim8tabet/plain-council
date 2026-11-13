@@ -20,7 +20,7 @@ export type Item = {
 };
 export type Stage = {
   id: number; stage_order: number; kind: StageKind; body_name: string; stage_date: string | null;
-  outcome: string | null; amended: boolean | null; source_url: string;
+  outcome: string | null; amended: boolean | null; decision_text: string | null; source_url: string;
 };
 export type Passage = { id: number; doc_title: string; doc_url: string; doc_date: string | null; stage: StageKind; page: number | null };
 export type Claim = {
@@ -69,7 +69,7 @@ export async function getCard(ref: string): Promise<Card | null> {
   const c = db();
   const [item, stages, claims, passages, votes, requests, part] = await Promise.all([
     c.from("items").select("*").eq("ref", ref).maybeSingle(),
-    c.from("stages").select("id,stage_order,kind,body_name,stage_date,outcome,amended,source_url").eq("item_ref", ref).order("stage_order"),
+    c.from("stages").select("id,stage_order,kind,body_name,stage_date,outcome,amended,decision_text,source_url").eq("item_ref", ref).order("stage_order"),
     c.from("claims").select("id,section,sort_order,stage,stage_date,text_en,text_fr,text_zh,passage_id,quote_display").eq("item_ref", ref).order("sort_order"),
     c.from("passages").select("id,doc_title,doc_url,doc_date,stage,page").eq("item_ref", ref),
     c.from("votes").select("*").eq("item_ref", ref).order("voted_at"),

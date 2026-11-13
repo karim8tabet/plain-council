@@ -48,3 +48,15 @@ def test_build_rows_ex31_2():
     assert rows["votes"][0]["voted_at"] == "2026-05-21T11:31:00-04:00"
     assert [r["report_back_timing"] for r in rows["report_requests"]] == ["2026-06-24", "June 2027"]
     assert rows["participation"]["status"] == "decided"
+
+
+def test_build_rows_staff_text_from_report():
+    from civic.pdf import extract_passages
+    out = fake_out("2026.EX31.2")
+    out["passages"] = [{"stage": "staff_report", "page": p.page, "text_original": p.text_original,
+                        "doc_title": "Staff report", "doc_url": "x"}
+                       for p in reversed(extract_passages((FX / "ex31_2_staff_report.pdf").read_bytes()))]
+    staff = build_rows(out, [], [])["stages"][0]
+    assert staff["kind"] == "staff_report"
+    assert "recommend that: 1. City Council increase the 2026 Operating Budget" in staff["decision_text"]
+    assert build_rows(fake_out("2026.EX31.2"), [], [])["stages"][0]["decision_text"] is None  # no report, no text

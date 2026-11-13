@@ -18,6 +18,7 @@ from pathlib import Path
 
 import httpx
 
+from civic.pdf import staff_recommendations
 from civic.report_log import parse_report_log
 from civic.text import normalize
 from civic.votes import fetch_vote_records, parse_votes
@@ -62,6 +63,10 @@ def participation_row(ref, item):
 def build_rows(out, votes, requests):
     ref, item, stages = out["ref"], out["item"], out["stages"]
     last = stages[-1] if stages else {}
+    # The item page doesn't repeat the staff recommendations, so for the "What changed" comparison
+    # they come from the staff report itself (its RECOMMENDATIONS section).
+    staff_recs = staff_recommendations([p["text_original"] for p in sorted(
+        (p for p in out["passages"] if p["stage"] == "staff_report"), key=lambda p: p["page"])])
     return {
         "item": {
             "ref": ref, "title": item["title"], "wards": item["wards"], "city_wide": item["city_wide"],
@@ -73,8 +78,8 @@ def build_rows(out, votes, requests):
         "stages": [{
             "item_ref": ref, "stage_order": s["order"], "kind": s["kind"], "body_name": s["body_name"],
             "stage_date": s["end_date"] or s["start_date"], "outcome": s["outcome"] or None,
-            "amended": s["amended"], "decision_text": s["decision_text"] or None, "source_url": s["source_url"],
-        } for s in stages],
+            "amended": s["amended"], "decision_text": s["decision_text"] or staff_text or None, "source_url": s["source_url"],
+        } for s in stages for staff_text in [staff_recs if s["kind"] == "staff_report" else ""]],
         "passages": [{
             "item_ref": ref, "doc_title": p["doc_title"], "doc_url": p["doc_url"], "stage": p["stage"],
             "doc_date": next((s["end_date"] or s["start_date"] for s in stages if s["kind"] == p["stage"]), None),
