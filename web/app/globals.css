@@ -1,26 +1,81 @@
 @import "tailwindcss";
 
+/* Colour tokens. Text contrast is at least 4.5:1 in both themes (WCAG AA).
+   Stage colours always come with a text label; colour is never the only signal. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #fbfaf7;
+  --card: #ffffff;
+  --ink: #1b1c1e;
+  --muted: #55595f;
+  --line: #dcd9d2;
+  --accent: #0b4f9c;
+  --accent-soft: #e6eef8;
+  --staff: #6b4e00;
+  --staff-soft: #fdf3d8;
+  --committee: #5b3a8c;
+  --committee-soft: #efe8f8;
+  --council: #0d5c3a;
+  --council-soft: #e3f3ea;
+  --warn: #8a2c0d;
+  --warn-soft: #fbe9e2;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #141517;
+    --card: #1d1f22;
+    --ink: #ecebe8;
+    --muted: #aeb2b8;
+    --line: #34373c;
+    --accent: #8ab8f0;
+    --accent-soft: #1c2b3f;
+    --staff: #f0cf7a;
+    --staff-soft: #332a12;
+    --committee: #c8adf0;
+    --committee-soft: #2b2140;
+    --council: #86d9ae;
+    --council-soft: #15301f;
+    --warn: #f4a68a;
+    --warn-soft: #3a1d13;
   }
 }
 
+@theme inline {
+  --color-paper: var(--paper);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-staff: var(--staff);
+  --color-staff-soft: var(--staff-soft);
+  --color-committee: var(--committee);
+  --color-committee-soft: var(--committee-soft);
+  --color-council: var(--council);
+  --color-council-soft: var(--council-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: var(--font-geist-sans);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+a { color: var(--accent); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+summary { cursor: pointer; }
+summary::-webkit-details-marker { display: none; }
+
+@media print {
+  body { background: #fff; color: #000; font-size: 12pt; }
+  .no-print { display: none !important; }
+  a { color: #000; }
+  details > *:not(summary) { display: block !important; }
 }

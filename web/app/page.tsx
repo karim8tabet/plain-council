@@ -1,69 +1,45 @@
-import Image from "next/image";
+import Link from "next/link";
+import { WARDS } from "@/lib/labels";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+    <div className="space-y-10">
+      <section className="space-y-3">
+        <h1 className="text-3xl font-semibold leading-tight">What is Toronto City Council deciding near you?</h1>
+        <p className="text-muted max-w-prose">
+          Plain-language summaries of council items: what is proposed, who it affects, where it is in the
+          process, and whether you can still have a say. Every sentence links to the official record.
+        </p>
+      </section>
+
+      <section aria-labelledby="find" className="rounded-xl border border-line bg-card p-5 space-y-3">
+        <h2 id="find" className="text-xl font-semibold">Find your ward</h2>
+        <form action="/find" method="get" className="flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-medium">First 3 characters of your postal code</span>
+            <input
+              name="pc" required maxLength={7} autoComplete="postal-code" inputMode="text"
+              placeholder="e.g. M5V" pattern="[Mm]\s*\d\s*[A-Za-z].*"
+              title="Toronto postal codes start with M, then a number and a letter (e.g. M5V)"
+              className="w-40 rounded-lg border border-line bg-paper px-3 py-2 uppercase text-lg"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+          </label>
+          <button className="rounded-lg bg-accent px-4 py-2 font-medium text-paper">Show my ward</button>
+        </form>
+        <p className="text-sm text-muted">
+          Only the first 3 characters are used, and nothing is stored. Not sure? Use the City&apos;s{" "}
+          <a href="https://www.toronto.ca/city-government/data-research-maps/neighbourhoods-communities/ward-profiles/">official ward finder</a>.
+        </p>
+      </section>
+
+      <section aria-labelledby="wards" className="space-y-3">
+        <h2 id="wards" className="text-xl font-semibold">Or choose a ward</h2>
+        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1">
+          {Object.entries(WARDS).map(([n, name]) => (
+            <li key={n}><Link href={`/ward/${n}`}>Ward {n}: {name}</Link></li>
+          ))}
+        </ul>
+      </section>
     </div>
   );
 }
