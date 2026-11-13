@@ -74,7 +74,32 @@ _TODO: kept up to date during the build._
 - **Groq** (open models, _TODO: exact model_): runs inside the product to draft, check and translate card text.
 
 ### Open-source libraries
-_TODO: added as each dependency is installed._
+**Pipeline (Python 3.14):**
+- httpx 0.28.1 (downloads pages)
+- beautifulsoup4 4.15.0 (reads item pages)
+- pdfplumber 0.11.10 (PDF text with page numbers)
+- RapidFuzz 3.14.6 (quote matching)
+- textstat 0.7.13 (reading level)
+- groq 1.7.0 (Groq client)
+- supabase 2.34.1 (database client)
+- openpyxl 3.1.5 (Report Request Log spreadsheet)
+- shapely 2.2.0 (postal area × ward overlap)
+- pytest 9.2.0 (tests)
+- pip-audit (security check)
+
+**Website:**
+- Next.js 16.4.6
+- React 19.3.0
+- Tailwind CSS 4.3.3
+- @supabase/supabase-js 2.119.0 + @supabase/ssr 0.12.7 (data and staff login)
+- qrcode 1.5.4 (poster QR code)
+- ics 3.12.1 (calendar files)
+- TypeScript, ESLint
+
+**Security check (Nov 13, 2026):**
+- pip-audit: no known vulnerabilities.
+- npm audit (production): 0 vulnerabilities.
+- 7 moderate advisories in development-only ESLint dependencies. They don't ship to the site.
 
 ### Datasets
 See **Data sources** above. Open Government Licence – Toronto.
