@@ -79,3 +79,7 @@ summary::-webkit-details-marker { display: none; }
   a { color: #000; }
   details > *:not(summary) { display: block !important; }
 }
+
+/* Tailwind's reset gives buttons the default arrow cursor; make every clickable thing show the hand. */
+button:not(:disabled), [role="button"], summary, input[type="submit"], label:has(> input[type="checkbox"]) { cursor: pointer; }
+button:disabled { cursor: not-allowed; }

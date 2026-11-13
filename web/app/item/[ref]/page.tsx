@@ -5,6 +5,7 @@ import { fmtDate, REQUEST_STATUS, SECTION_ORDER, SECTION_TITLES, WARDS } from "@
 import { Sentence } from "@/components/Sentence";
 import { Timeline } from "@/components/Timeline";
 import { HaveASay } from "@/components/HaveASay";
+import { readingGrade } from "@/lib/reading";
 
 async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
   const { ref } = await params;
@@ -14,6 +15,7 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
   const byPassage = new Map(passages.map((p) => [p.id, p]));
   const bodyOf = new Map(stages.map((s) => [s.kind, s.body_name]));
   const numbered = claims.map((c, i) => ({ c, n: i + 1 }));
+  const grade = readingGrade(claims.map((c) => c.text_en));
 
   return (
     <article className="space-y-8">
@@ -56,7 +58,7 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
             <p className="text-xs text-muted">
               Drafted with AI from the official records, checked by code and a second AI pass, and approved by a person
               {item.checked_at ? ` on ${fmtDate(item.checked_at)}` : ""}.
-              {item.reading_grade ? ` Reading level: about grade ${Math.round(item.reading_grade)}.` : ""}
+              {grade !== null ? ` Reading level of these sentences: about grade ${Math.max(1, Math.round(grade))}.` : ""}
             </p>
           </>
         )}
@@ -83,7 +85,7 @@ async function DecisionCard({ params }: { params: Promise<{ ref: string }> }) {
                 <p><span className="font-medium">Asked of:</span> {r.assigned_to ?? "not stated"}</p>
                 <p><span className="font-medium">Report back:</span> {r.report_back_timing && /^\d{4}-\d{2}-\d{2}$/.test(r.report_back_timing) ? fmtDate(r.report_back_timing) : r.report_back_timing ?? "not stated"}</p>
                 <p><span className="font-medium">Status:</span> {REQUEST_STATUS[r.status] ?? r.status}</p>
-                {r.closed_by && <p><span className="font-medium">Answered by item:</span> <a href={`/item/${r.closed_by}`}>{r.closed_by}</a></p>}
+                {r.closed_by && <p><span className="font-medium">Answered by item:</span> <a href={`https://secure.toronto.ca/council/agenda-item.do?item=${r.closed_by}`}>{r.closed_by}</a> (official City page)</p>}
                 <details><summary className="text-accent">Request as written</summary><p className="mt-1 text-muted">{r.directive}</p></details>
               </li>
             ))}
