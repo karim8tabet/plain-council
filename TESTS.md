@@ -71,6 +71,7 @@ Mark each row ✅ pass / ❌ fail / ⏭ skipped (say why). If a test fails and y
 | D5 | Auto | Demo clerk (read-only) tries to approve | Denied. The screen shows "Demo account: changes aren't saved" |
 | D6 | Check | Browser network tab on the public site | Only approved content in responses. No service key in any file sent to the browser |
 | D7 | Check | Git history | No `.env`, keys or tokens committed (`git log -p` search for "key", "secret") |
+| D0 | Check | SQL: `select tablename from pg_tables where schemaname = 'public' and not rowsecurity;` | **No rows** (every table has row-level security). Passed Nov 13 after running 001_schema.sql |
 | D8 | Auto | Votes table | Each vote has `motion_type` = amendment or main item |
 
 ## 5. Staff side

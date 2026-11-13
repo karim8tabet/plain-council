@@ -71,7 +71,7 @@ _TODO: kept up to date during the build._
 ### AI assistance
 - **Claude Code** (Anthropic, model Claude Opus 5.5): planning, code generation and review.
 - **Codex** (OpenAI): code generation for well-defined, test-checked parts. _TODO: model and which parts._
-- **Groq** (open models, _TODO: exact model_): runs inside the product to draft, check and translate card text.
+- **Groq** running **OpenAI gpt-oss-120b** (open-weight model; set by `GROQ_MODEL`, checked available Nov 13, 2026): runs inside the product to draft, check and translate card text.
 
 ### Open-source libraries
 **Pipeline (Python 3.14):**
