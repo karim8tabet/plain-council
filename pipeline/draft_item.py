@@ -68,7 +68,7 @@ def main(ref):
     llm = groq_llm()
     claims = draft_claims(item, passages, llm, model=llm.model)
     print(f"drafted {len(claims)} sentences; verifying...", flush=True)
-    verify_claims(claims, llm)
+    verify_claims(claims, llm, {s.kind: s.body_name for s in item.stages})
 
     out = {
         "ref": ref,

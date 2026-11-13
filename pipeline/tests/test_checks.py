@@ -74,3 +74,30 @@ def test_reading_grade_orders_texts():
     hard = reading_grade("The municipal administration recommends comprehensive implementation of "
                          "pedestrianization infrastructure notwithstanding jurisdictional considerations.")
     assert isinstance(easy, float) and easy < 8 < hard
+
+
+# --- quotes with "..." (pieces must all match, in order, in one passage) ---
+LONG = ("City Council authorize an amendment to Blanket Contract Number 4300000099, competitively awarded "
+        "under nRFP Doc5443909641, issued to CLEAResult Canada Inc. for additional supply, delivery and "
+        "installation of portable air conditioners by $1,041,667 net of all applicable taxes and charges.")
+
+
+def test_ellipsis_quote_shows_full_span():
+    m = match_quote("authorize an amendment to Blanket Contract Number 4300000099, competitively awarded ... "
+                    "for additional supply, delivery and installation of portable air conditioners", [P(LONG)])
+    assert m.passed
+    assert "nRFP Doc5443909641" in m.source_span  # the skipped words are shown to residents
+
+
+def test_ellipsis_pieces_out_of_order_fail():
+    assert not match_quote("for additional supply, delivery and installation of portable ... "
+                           "authorize an amendment to Blanket Contract Number", [P(LONG)]).passed
+
+
+def test_ellipsis_with_invented_piece_fails():
+    assert not match_quote("authorize an amendment to Blanket Contract Number 4300000099 ... "
+                           "and cancel every other heat program in the city", [P(LONG)]).passed
+
+
+def test_ellipsis_tiny_piece_fails():
+    assert not match_quote("authorize an amendment to Blanket Contract ... taxes", [P(LONG)]).passed

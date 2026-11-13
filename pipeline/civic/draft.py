@@ -66,7 +66,7 @@ Rules (all required):
 - REWRITE in everyday words; never copy the quote into "text". Say "this year's budget" not "2026 Operating Budget"; "money set aside for extreme weather" not "Corporate Extreme Weather Reserve"; "the City's environment and climate staff" not long job titles. Leave out contract numbers, "gross/net" and legal phrases like "authorize" or "in coordination with". Keep exact amounts and counts.
 - Every sentence needs "quote": ONE continuous piece of the SOURCE (10-40 words), copied EXACTLY, word for word, that supports it. Never use "..." or skip words inside a quote; if the support is long, quote the most important continuous part.
 - "stage" must be the stage label of the SOURCE block the quote comes from.
-- Say who said it, matching the stage: staff_report -> "Staff recommend..."; committee, community_council or board -> "The [body] recommended..."; city_council -> "City Council decided...". Never say a recommendation was approved or decided unless the quote is a City Council decision.
+- Say who said it, matching the stage: staff_report -> "Staff recommend..."; committee, community_council or board -> "The [body] recommended..."; city_council -> "City Council decided...". Never say a recommendation was approved or decided unless the quote is a City Council decision. Never state a staff proposal as fact ("The City will..."); write "Staff propose..." or "The staff report says...".
 - Keep important conditions, limits, amounts and exceptions. If something is uncertain or still to be decided, say so (section "uncertainty").
 - Do not write deadlines or say when people can comment. Do not mention dates unless the date is in your quote.
 - No opinions and no loaded words (e.g. controversial, finally, only, massive, landmark, sadly).
@@ -92,6 +92,10 @@ DRAFT_SCHEMA = {
 }
 
 VERIFY_SYSTEM = """You check plain-language sentences against the official source text they cite.
+Each item says which STAGE the source comes from:
+- staff_report: staff recommendations are worded as orders to Council ("City Council increase..."). They are only recommendations, so "Staff recommend..." is correct for them.
+- committee / community_council / board: the body's recommendations to Council, ALSO worded "City Council direct/increase/request...". The words "City Council" here do NOT mean Council acted; the SOURCE label says who made the recommendation. "The [body] recommended..." is correct.
+- city_council: Council's final decision. "City Council decided/approved..." is correct.
 For each item, compare SENTENCE with SOURCE only and give one verdict:
 - supported: everything in the sentence is stated in the source, with the same meaning.
 - not_supported: the sentence adds, changes or contradicts something (wrong number, wrong body, says decided when only recommended, etc.).
@@ -183,12 +187,27 @@ def check_claim(c: Claim, passages: list[SourcePassage], allowed: set[int] | Non
     return c
 
 
-def verify_claims(claims: list[Claim], llm) -> None:
-    """Second AI check, only on sentences that passed the quote check."""
+_SOURCE_LABEL = {
+    "staff_report": "From the staff report's recommendations (not yet decided)",
+    "committee": "From the {body}'s recommendations to City Council (not yet decided)",
+    "community_council": "From the {body}'s recommendations to City Council (not yet decided)",
+    "board": "From the {body}'s recommendations (not yet decided)",
+    "city_council": "From City Council's final decision",
+}
+
+
+def verify_claims(claims: list[Claim], llm, stage_names: dict | None = None) -> None:
+    """Second AI check, only on sentences that passed the quote check. Each source is labelled
+    with who said it, because committee text reads "City Council direct..." even though it is
+    only a recommendation to Council."""
+    stage_names = stage_names or {}
     todo = [(i, c) for i, c in enumerate(claims) if c.status != "rejected"]
     for start in range(0, len(todo), 12):
         batch = todo[start:start + 12]
-        body = "\n\n".join(f"ID {i}\nSENTENCE: {c.text_en}\nSOURCE: {c.quote_display}" for i, c in batch)
+        body = "\n\n".join(
+            f"ID {i}\nSTAGE: {c.stage}\nSENTENCE: {c.text_en}\n"
+            f"SOURCE [{_SOURCE_LABEL[c.stage].format(body=stage_names.get(c.stage, 'committee'))}]: {c.quote_display}"
+            for i, c in batch)
         data = llm([{"role": "system", "content": VERIFY_SYSTEM}, {"role": "user", "content": body}], VERIFY_SCHEMA)
         got = {r["id"]: r for r in data.get("results", [])}
         for i, c in batch:

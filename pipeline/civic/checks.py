@@ -11,7 +11,38 @@ class QuoteMatch:
     passage_index: int | None
     source_span: str | None
 
+_ELLIPSIS = re.compile(r"\s*(?:\.\.\.|…)\s*")
+
+
 def match_quote(quote, passages, threshold=95):
+    """Find the quote in one passage. A quote with "..." passes only if every piece (5+ words)
+    is found, in order, in the SAME passage; the source span shown then runs from the first
+    piece to the last, so residents see the skipped words too."""
+    pieces = [p for p in _ELLIPSIS.split(quote.strip()) if p]
+    if len(pieces) > 1:
+        return _match_pieces(pieces, passages, threshold)
+    return _match_one(quote, passages, threshold)
+
+
+def _match_pieces(pieces, passages, threshold):
+    if any(len(p.split()) < 5 for p in pieces):
+        return QuoteMatch(False, 0.0, None, None)
+    for index, passage in enumerate(passages):
+        original = getattr(passage, "text_original", str(passage))
+        normalized, mapping = normalize_with_map(original)
+        pos, spans, scores = 0, [], []
+        for piece in pieces:
+            a = fuzz.partial_ratio_alignment(normalize(piece), normalized[pos:])
+            if a.score < threshold:
+                break
+            spans.append((pos + a.dest_start, pos + a.dest_end)); scores.append(a.score); pos += a.dest_end
+        else:
+            lo, hi = mapping[spans[0][0]], mapping[spans[-1][1] - 1] + 1
+            return QuoteMatch(True, min(scores), index, original[lo:hi])
+    return QuoteMatch(False, 0.0, None, None)
+
+
+def _match_one(quote, passages, threshold):
     q = normalize(quote); best = (0.0, None, None)
     for index, passage in enumerate(passages):
         original = getattr(passage, "text_original", str(passage))
