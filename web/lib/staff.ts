@@ -4,9 +4,13 @@
 import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { connection } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
 export async function staffClient() {
+  // Staff screens always run per request. Without this, Next.js tries to prerender them and
+  // trips over the Supabase client reading the clock (Date.now) to check token expiry.
+  await connection();
   const store = await cookies();
   return createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
     cookies: {
