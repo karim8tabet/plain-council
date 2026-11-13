@@ -109,9 +109,12 @@ async function Queue({ searchParams }: { searchParams: Promise<{ item?: string; 
                     <textarea name="text" defaultValue={c.text_en} rows={2} className="mt-1 w-full rounded-lg border border-line bg-paper px-3 py-2" />
                   </label>
                   {c.text_en !== c.ai_draft && <p className="text-xs text-muted">Original AI draft: {c.ai_draft}</p>}
-                  <div className="flex gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <button name="action" value="approve" className="rounded-lg bg-council px-3 py-1.5 text-sm font-medium text-paper">Approve</button>
                     <button name="action" value="reject" className="rounded-lg border border-warn px-3 py-1.5 text-sm font-medium text-warn">Reject</button>
+                    {user.role === "demo" && (
+                      <span className="text-sm text-warn">Demo account: buttons work, but nothing is saved.</span>
+                    )}
                   </div>
                 </form>
               )}
