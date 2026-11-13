@@ -1,6 +1,5 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import FSA_WARDS from "@/lib/fsa-wards.json";
 import { WARDS } from "@/lib/labels";
 
@@ -11,11 +10,12 @@ const LOOKUP = FSA_WARDS as Record<string, number[]>;
 async function Result({ searchParams }: { searchParams: Promise<{ pc?: string }> }) {
   const fsa = ((await searchParams).pc ?? "").replace(/\s+/g, "").slice(0, 3).toUpperCase();
   const wards = LOOKUP[fsa] ?? [];
-  if (wards.length === 1) redirect(`/ward/${wards[0]}`);
   return (
     <div className="space-y-4">
       <h1 className="text-2xl font-semibold">Postal code area {fsa || "?"}</h1>
-      {wards.length > 1 ? (
+      {wards.length === 1 ? (
+        <p><Link href={`/ward/${wards[0]}`}>Go to Ward {wards[0]}: {WARDS[wards[0]]}</Link></p>
+      ) : wards.length > 1 ? (
         <>
           <p>This postal code area crosses more than one ward. Which one is yours?</p>
           <ul className="space-y-1">

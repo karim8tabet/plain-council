@@ -20,9 +20,11 @@ export function fmtDate(d: string | null | undefined): string {
 
 export function fmtDateTime(d: string | null | undefined): string {
   if (!d) return "";
-  return new Date(d).toLocaleString("en-CA", {
-    timeZone: "America/Toronto", year: "numeric", month: "long", day: "numeric", hour: "numeric", minute: "2-digit",
-  });
+  const opts = { timeZone: "America/Toronto", year: "numeric", month: "long", day: "numeric" } as const;
+  const time = new Date(d).toLocaleTimeString("en-CA", { timeZone: "America/Toronto", hour: "numeric", minute: "2-digit" });
+  const date = new Date(d).toLocaleDateString("en-CA", opts);
+  // Midnight means the record has a date but no time; don't show a made-up "12:00 a.m.".
+  return /^(12|0):00\b/.test(time) && /a\.?m/i.test(time) ? date : `${date} at ${time}`;
 }
 
 /** The tag shown on every sentence, so nobody mistakes a recommendation for a decision. */

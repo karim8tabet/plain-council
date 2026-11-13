@@ -22,7 +22,7 @@ function VoteLine({ v }: { v: Vote }) {
         </summary>
         <div className="mt-1 ml-4 text-muted space-y-1">
           {v.description && <p>Motion as recorded: “{v.description}”</p>}
-          <p>{fmtDateTime(v.voted_at)}. Source: {v.source}.</p>
+          <p>{fmtDateTime(v.voted_at).replace(/\.$/, "")}. Source: {v.source}.</p>
         </div>
       </details>
     </li>
