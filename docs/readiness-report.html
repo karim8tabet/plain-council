@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Plain Council: Municipal Readiness Report</title>
+<style>
+  @page { size: Letter; margin: 0.45in 0.5in; }
+  * { box-sizing: border-box; }
+  body { font: 9pt/1.34 "Segoe UI", Arial, sans-serif; color: #1a1a1a; margin: 0; }
+  header { border-bottom: 2px solid #1d4f91; padding-bottom: 4px; margin-bottom: 6px; }
+  h1 { font-size: 15pt; margin: 0; color: #1d4f91; }
+  .sub { margin: 2px 0 0; font-size: 8.6pt; color: #444; }
+  .cols { column-count: 2; column-gap: 0.28in; }
+  h2 { font-size: 9.6pt; margin: 6px 0 2px; color: #1d4f91; break-after: avoid; }
+  p { margin: 0 0 3px; }
+  ul { margin: 0 0 3px; padding-left: 13px; }
+  li { margin: 0 0 1.5px; }
+  table { border-collapse: collapse; width: 100%; margin: 2px 0 4px; break-inside: avoid; }
+  td, th { border: 1px solid #c9d3e0; padding: 1.5px 4px; text-align: left; vertical-align: top; }
+  th { background: #eef3fa; font-weight: 600; }
+  .box { background: #eef3fa; border-left: 3px solid #1d4f91; padding: 3px 6px; margin: 3px 0 4px; break-inside: avoid; }
+  footer { margin-top: 5px; border-top: 1px solid #c9d3e0; padding-top: 3px; font-size: 7.4pt; color: #555; }
+  a { color: #1d4f91; text-decoration: none; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Plain Council: Municipal Readiness Report</h1>
+  <p class="sub">Plain-language, source-linked summaries of council items, approved by a person before publishing. CIVIC Hack 2026 ·
+  Live prototype: <a href="https://plain-council.vercel.app/">plain-council.vercel.app</a> · Tested on 3 real Toronto items (2 decided, 1 open for comment)</p>
+</header>
+<div class="cols">
+
+<h2>1. Who would use it</h2>
+<ul>
+  <li><b>Residents</b>, especially renters, newcomers, students, seniors and shift workers. No account needed. They enter the first 3 characters of a postal code (or pick a ward) and get a card for each item: what is proposed or decided, who and where it affects, what changed at each step, and whether they can still comment.</li>
+  <li><b>City Clerk's Office / engagement staff</b> run one script per item and approve, edit or reject each AI-drafted sentence in a simple review screen. Every action is logged with who and when.</li>
+  <li><b>Councillors' offices, libraries, community groups, media</b> share card links. Every sentence links to the exact source passage.</li>
+</ul>
+
+<h2>2. Data and resources needed</h2>
+<ul>
+  <li><b>Data the City already publishes:</b> meeting-site item pages and staff reports, Council Voting Record, Report Request Log, ward boundaries. Also Statistics Canada postal-area boundaries. Nothing new has to be collected.</li>
+  <li><b>People:</b>
+    <ul>
+      <li>One reviewer: about 15 minutes per item (10–20 minutes in testing).</li>
+      <li>One IT contact: about 2 days to set up, then about 2 hours a month.</li>
+    </ul>
+  </li>
+  <li><b>Systems:</b> a Postgres database (Supabase), web hosting (Vercel) and an AI model provider. All are swappable for systems the City already uses.</li>
+</ul>
+
+<h2>3. Rough cost (pilot: ~50 items a month)</h2>
+<table>
+  <tr><th>Item</th><th>Monthly</th></tr>
+  <tr><td>Database + staff login (Supabase Pro)</td><td>~US$25</td></tr>
+  <tr><td>Website hosting (Vercel Pro, 1 seat)</td><td>~US$20</td></tr>
+  <tr><td>AI drafting (~5–10 calls per item, once). Visits by residents cost nothing in AI</td><td>under US$5</td></tr>
+  <tr><td><b>Staff review</b> (~15 min × 50 items)</td><td><b>~12 hours</b></td></tr>
+</table>
+<p>The prototype runs on free tiers. Prices are approximate published list prices, not quotes; check current pricing before buying. Staff time, not technology, is the main cost.</p>
+
+<h2>4. Privacy</h2>
+<ul>
+  <li><b>Postal code.</b> Only the first 3 characters (an area, not a home) are used. They're matched against a file in the website, and never stored or sent anywhere.</li>
+  <li><b>Nothing about residents reaches the AI.</b> It only reads public City documents, once, before publishing.</li>
+  <li><b>People who wrote in or spoke</b> are counted, never named or summarized. Their names are kept out of the database and the code.</li>
+  <li><b>Accounts.</b> No resident accounts and no tracking. Staff accounts are created by an administrator; public sign-up is off.</li>
+  <li><b>Security.</b> Database rules let the public read approved sentences only. Nobody can edit a sentence's source quote. AI and admin keys never reach the website.</li>
+</ul>
+
+<h2>5. What residents should know</h2>
+<div class="box">
+  <ul>
+    <li><b>This is a summary, not the official record.</b> If they differ, the official record is correct. Every sentence links to its source.</li>
+    <li><b>AI drafts the sentences and a person approves each one.</b> The card shows the date it was checked.</li>
+    <li><b>Tags show the step:</b> a staff or committee <i>recommendation</i> is not a final <i>decision</i>.</li>
+    <li><b>Deadlines.</b> A comment deadline is shown only if the City's page states it. Check the official page before you submit.</li>
+    <li><b>Wards.</b> A postal area can cross ward lines. Confirm your ward with the City's address finder.</li>
+  </ul>
+</div>
+
+<h2>6. How other municipalities could adapt it</h2>
+<ul>
+  <li><b>One reader to replace.</b> Only the meeting-site reader is Toronto-specific. A city on eSCRIBE, Granicus or iCompass writes one reader that returns the same fields: items, steps, decision text, documents. Checks, review screen and website stay the same.</li>
+  <li><b>Ward lookup.</b> Rebuild it from the city's own ward boundaries with the included script.</li>
+  <li><b>AI model.</b> The model is one setting. An open-weight model can run on the city's own servers if procurement requires it.</li>
+  <li><b>Documented.</b> Setup steps, tests (62) and architecture documents are in the repository.</li>
+</ul>
+
+<h2>7. Suggested pilot</h2>
+<ul>
+  <li><b>Scope:</b> 3 months, one committee or community council.</li>
+  <li><b>Reviewer:</b> a clerk who did not build the tool reviews each card.</li>
+  <li><b>Measure:</b>
+    <ul>
+      <li>corrections per card (testing: 27 of 62 sentences reworded and 6 rejected before publishing)</li>
+      <li>time to publish</li>
+      <li>visits by ward</li>
+      <li>clicks to the City's comment form</li>
+    </ul>
+  </li>
+  <li><b>Then:</b> add translation and a printable poster for libraries and tenant groups.</li>
+</ul>
+</div>
+<footer>Sources: City of Toronto meeting site (TMMIS), Toronto Open Data (Voting Record, Report Request Log, City Wards), Statistics Canada 2021 FSA boundaries. AI: OpenAI gpt-oss-120b on Groq (in the product); Claude Code and Codex (building it). Details: README and docs/ in the repository.</footer>
+</body>
+</html>
