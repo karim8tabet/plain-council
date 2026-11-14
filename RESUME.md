@@ -1,6 +1,6 @@
 # Where we left off
 
-_Last updated: Fri Nov 13, 2026, ~6:30 PM ET._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
+_Last updated: Sat Nov 14, 2026, early morning ET._ Read this first when resuming. Full plan in `PLAN.md`, tests in `TESTS.md`.
 
 ## ⚠ Deadline
 Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.**
@@ -21,8 +21,14 @@ Code freeze and Devpost submission: **Sat Nov 14, 2026, 10:00 AM ET.**
 - Repo: private GitHub `karim8tabet/plain-council` (make public before submitting). Residents' names removed from fixtures and all history.
 - AI pre-check of all sentences for the human review: `out/review-notes.md` (not committed). Test review clicks were reset; review log is empty.
 
+- All 56 sentences reviewed and published (7 rejected); reading level ~grade 7–10 on the live cards.
+- Docs done: `docs/requirements.md`, `docs/architecture.md` (5 UML diagrams), `docs/ai-and-verification.md` (counts), README rewritten. `recheck.py` added.
+- Readiness Report: `docs/Readiness-Report.pdf` (1 page; source `docs/readiness-report.html`, export with Edge headless). Video script: `out/video-script.md` (~382 words, ~2:45).
+
 ## Waiting on you
-- Review sentences for all 3 items in /staff using `out/review-notes.md` (this is the "human review" evidence).
+- Record the video (script in `out/video-script.md`), keep it under 3:00.
+- Devpost: description, live + repo links, demo login password, video, report PDF. Compare the report with the Discord #resources template.
+- Make the GitHub repo public. Final commit before 10:00 AM.
 - Make sure "Allow new users to sign up" is off in Supabase, and the clerk password is strong.
 - Serena: `.serena/project.yml` has `language_servers: []`. Add `python` and `typescript`.
 
